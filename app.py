@@ -4,12 +4,11 @@ import os
 from flask_jwt import jwt
 
 from security import authenticate,identity
-from resources.user import UserSignup,
+from resources.user import UserSignup,UserWin,UserLose,UserTie,LeaderBoard
 
 app=Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///data.db'
+app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE_URL','sqlite:///data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
-app.config['PROPAGATE_EXCEPTIONS']=True
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 api=Api(app)
 
@@ -20,6 +19,11 @@ def create_tables():
 jwt=JWT(app, authenticate, identity)
 
 api.add_resource(UserSignup, '/signup')
+api.add_resource(UserWin, '/user/win')
+api.add_resource(UserLose, '/user/lose')
+api.add_resource(UserTie, '/user/tie')
+api.add_resource(UserRecord, '/user/record')
+api.add_resource(LeaderBoard, '/leaderboard')
 
 
 if __name__ == '__main__':
