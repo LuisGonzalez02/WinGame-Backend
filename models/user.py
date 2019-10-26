@@ -27,10 +27,10 @@ class UserModel(db.Model):
         return{username: self.username}
     
     @classmethod
-    find_by_email(cls,email):
+    def find_by_email(cls,email):
         return cls.query.filter_by(email=email).first()
     @classmethod
-    find_by_username(cls,username):
+    def find_by_username(cls,username):
         return cls.query.filter_by(username=username).first()
     def save_to_db(self):
         db.session.add(self)
