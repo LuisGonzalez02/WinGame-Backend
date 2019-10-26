@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 import os
-from flask_jwt import jwt
+from flask_jwt import JWT
 
 from security import authenticate,identity
 from resources.user import UserSignup,UserWin,UserLose,UserTie,LeaderBoard,Test
