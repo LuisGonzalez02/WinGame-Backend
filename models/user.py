@@ -14,7 +14,7 @@ class UserModel(db.Model):
     loses=db.Column(db.Integer)
     ties=db.Column(db.Integer)
 
-    def __init__(self,username,password,email)
+    def __init__(self,username,password,email):
         hashed_password = generate_password_hash(data['password'], method='sha256')
         self.public_id=str(uuid.uuid4())
         self.email=email
