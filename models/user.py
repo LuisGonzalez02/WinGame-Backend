@@ -51,9 +51,8 @@ class UserModel(db.Model):
     def leaderBoard(cls):
         leaders = cls.query.order_by(cls.wins.desc()).all()
         if not leaders:
-        return jsonify({'message' : 'No user found!'})
+            return jsonify({'message' : 'No user found!'})
         output=[]
-
         for leader in leaders:
             user_data = {}
             user_data['name'] = leader.name
