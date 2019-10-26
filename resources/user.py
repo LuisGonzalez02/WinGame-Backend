@@ -66,6 +66,6 @@ class UserRecord(Resource):
         if foundUser:
             return foundUser.userRecord()
 class Test(Resource):
-    def put(self):
+    def get(self):
         return {"hey":"hello"}
         
