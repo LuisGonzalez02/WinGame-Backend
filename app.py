@@ -36,4 +36,5 @@ api.add_resource(Test, '/test')
 if __name__ == '__main__':
     from db import db
     db.init_app(app)
-    app.run(port=5000,debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(port=port)
