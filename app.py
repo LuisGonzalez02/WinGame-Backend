@@ -3,8 +3,9 @@ from flask_restful import Api
 import os
 from flask_jwt import JWT
 
-from security import authenticate,identity
-from resources.user import UserSignup,UserWin,UserLose,UserTie,LeaderBoard,Test
+from security import authenticate, identity
+from resources.user import UserSignup,UserWin,UserLose,UserTie,LeaderBoard,Test,UserRecord
+from resources.game import Game,PlayerMove,CPUMove,CheckStatus
 
 app=Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE_URL','sqlite:///data.db')
@@ -24,7 +25,12 @@ api.add_resource(UserLose, '/user/lose')
 api.add_resource(UserTie, '/user/tie')
 api.add_resource(UserRecord, '/user/record')
 api.add_resource(LeaderBoard, '/leaderboard')
-api.add_resource(LeaderBoard, '/test')
+api.add_resource(Game, '/gamehandle')
+api.add_resource(PlayerMove, '/playermove')
+api.add_resource(CPUMove, '/cpumove')
+api.add_resource(CheckStatus, '/checkstatus')
+
+api.add_resource(Test, '/test')
 
 
 if __name__ == '__main__':

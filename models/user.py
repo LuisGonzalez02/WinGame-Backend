@@ -1,4 +1,5 @@
 from db import db
+from flask import jsonify
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -15,14 +16,14 @@ class UserModel(db.Model):
     ties=db.Column(db.Integer)
 
     def __init__(self,username,password,email):
-        hashed_password = generate_password_hash(data['password'], method='sha256')
+        hashed_password = generate_password_hash(password)
         self.public_id=str(uuid.uuid4())
         self.email=email
         self.password=hashed_password
         self.username=username
-        wins=0
-        loses=0
-        ties=0
+        self.wins=0
+        self.loses=0
+        self.ties=0
     def json(self):
         return{username: self.username}
     
@@ -32,6 +33,9 @@ class UserModel(db.Model):
     @classmethod
     def find_by_username(cls,username):
         return cls.query.filter_by(username=username).first()
+    @classmethod
+    def find_by_id(cls,user_id):
+        return cls.query.filter_by(id=user_id).first()
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
@@ -45,7 +49,7 @@ class UserModel(db.Model):
         self.loses+=1
         db.session.commit()
     def save_tie(self):
-        self.wins+=1
+        self.ties+=1
         db.session.commit()
     @classmethod
     def leaderBoard(cls):
@@ -55,7 +59,7 @@ class UserModel(db.Model):
         output=[]
         for leader in leaders:
             user_data = {}
-            user_data['name'] = leader.name
+            user_data['name'] = leader.username
             user_data['wins'] = leader.wins
             user_data['loses'] = leader.loses
             user_data['ties'] = leader.ties
@@ -67,7 +71,7 @@ class UserModel(db.Model):
         user_record['wins'] = self.wins
         user_record['loses'] = self.loses
         user_record['ties'] = self.ties
-        return jsonify(user_record)
+        return {self.username:user_record}
 
 
 

@@ -1,10 +1,11 @@
 from flask_restful import Resource,reqparse
 from flask_jwt import jwt_required, current_identity
+from flask import jsonify
 from models.user import UserModel
 
 class UserSignup(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('username',
+    parser.add_argument("username",
                         type=str,
                         required=True,
                         help="Field cannot be empty")
@@ -20,15 +21,15 @@ class UserSignup(Resource):
         data=UserSignup.parser.parse_args()
 
         if UserModel.find_by_username(data['username']):
-            return{'message': 'Username is already in use.'}
+            return{"message": "Username is already in use."}
         if UserModel.find_by_email(data['email']):
-            return{'message': 'Email is already in use.'}
+            return{"message": "Email is already in use."}
         user=UserModel(data['username'],data['password'], data['email'])
         user.save_to_db()
 
-        return{'message': 'User created'}
+        return{"message": "User created"}
 class UserWin(Resource):
-    @jwt_required
+    @jwt_required()
     def put(self):
         user=current_identity
         foundUser=UserModel.find_by_email(user.email)
@@ -37,7 +38,7 @@ class UserWin(Resource):
 
         return{'message': 'Win Saved'}
 class UserLose(Resource):
-    @jwt_required
+    @jwt_required()
     def put(self):
         user=current_identity
         foundUser=UserModel.find_by_email(user.email)
@@ -46,7 +47,7 @@ class UserLose(Resource):
 
         return{'message': 'Lose Saved'}
 class UserTie(Resource):
-    @jwt_required
+    @jwt_required()
     def put(self):
         user=current_identity
         foundUser=UserModel.find_by_email(user.email)
@@ -55,11 +56,11 @@ class UserTie(Resource):
 
         return{'message': 'Tie Saved'}
 class LeaderBoard(Resource):
-    @jwt_required
+    @jwt_required()
     def get(self):
         return UserModel.leaderBoard()
 class UserRecord(Resource):
-    @jwt_required
+    @jwt_required()
     def get(self):
         user=current_identity
         foundUser=UserModel.find_by_email(user.email)
