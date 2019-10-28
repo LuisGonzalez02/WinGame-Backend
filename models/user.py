@@ -10,7 +10,7 @@ class UserModel(db.Model):
     public_id = db.Column(db.String(50), unique=True)
     email = db.Column(db.String(50), unique=True)
     username = db.Column(db.String(50))
-    password = db.Column(db.String(80))
+    password = db.Column(db.String(180))
     wins=db.Column(db.Integer)
     loses=db.Column(db.Integer)
     ties=db.Column(db.Integer)
