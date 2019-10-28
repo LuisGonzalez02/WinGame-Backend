@@ -13,9 +13,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 api=Api(app)
 
-# @app.before_first_request
-# def create_tables():
-#     db.create_all()
+
 
 jwt=JWT(app, authenticate, identity)
 
@@ -36,5 +34,4 @@ api.add_resource(Test, '/test')
 if __name__ == '__main__':
     from db import db
     db.init_app(app)
-    port = int(os.environ.get('PORT', 5000))
-    app.run(port=port)
+    app.run(port=5000,debug=True)
