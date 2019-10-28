@@ -34,11 +34,40 @@ class PlayerMove(Resource):
     def put(self):
         data=PlayerMove.parser.parse_args()
         ingame=GameModel.check_if_in_game(current_identity.username)
+        user=UserModel.find_by_username(current_identity.username)
         if ingame:
+            board=ingame.gameBoard()
             if ingame.make_move(data['move'],data['symbol']):
-                return {"message":"Move has been made"}
-            return {"message":"Not Player Turn/Space already used"}
-        return{"message":"User not in game"}
+                status=ingame.check_game_status()
+                if status["winner"]=="none":
+                    if ingame.cpu_move():
+                        board=ingame.gameBoard()
+                        status=ingame.check_game_status()
+                        if status["winner"]=="none":
+                            return{"Game Status":"Still going","message":"Move has been made","board":board}
+                        if status["winner"]=="player1":
+                            user.save_win()
+                            return{"Game Status":"Game Won","message":"Move has been made","board":board}
+                        elif status["winner"]=="tie":
+                            user.save_tie()
+                            return{"Game Status":"Tie","message":"Move has been made","board":board}
+                        else:
+                            user.save_lose()
+                            return{"Game Status":"Game Lost","message":"Move has been made","board":board}
+                    return {"Game Status":"Still going","message":"Not CPU Turn","board":board}
+                else:
+                    board=ingame.gameBoard()
+                    if status["winner"]=="player1":
+                        user.save_win()
+                        return{"Game Status":"Game Won","message":"Move has been made","board":board}
+                    elif status["winner"]=="tie":
+                        user.save_tie()
+                        return{"Game Status":"Tie","message":"Move has been made","board":board}
+                    else:
+                        user.save_lose()
+                        return{"Game Status":"Game Lost","message":"Move has been made","board":board}
+            return {"message":"Not Player Turn/Space already used","Game Status":"Still going","board":board}
+        return{"message":"User not in game","Game Status":"Still going","board":["","","","","","","","",""]}
 class CPUMove(Resource):
     @jwt_required()
     def put(self):

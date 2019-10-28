@@ -37,6 +37,18 @@ class GameModel(db.Model):
         self.s9=""
         self.playerturn=True
     
+    def gameBoard(self):
+        return[
+        self.s1,
+        self.s2,
+        self.s3,
+        self.s4,
+        self.s5,
+        self.s6,
+        self.s7,
+        self.s8,
+        self.s9]
+    
     @classmethod
     def check_if_in_game(cls,username):
         return cls.query.filter_by(player1=username).first()
