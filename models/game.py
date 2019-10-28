@@ -56,7 +56,7 @@ class GameModel(db.Model):
         db.session.add(self)
         db.session.commit()
         gameInfo=GameModel.query.filter_by(player1=username).first()
-        return {"message":"Game Started","game_id":gameInfo.id}
+        return {"message":"Game Started","game_id":gameInfo.id,"board":["","","","","","","","",""]}
     @classmethod
     def leave_game(cls,user_id):
         cls.query.filter_by(player1=user_id).delete()
