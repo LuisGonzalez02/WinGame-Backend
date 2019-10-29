@@ -19,6 +19,7 @@ class GameModel(db.Model):
     s7=db.Column(db.String(2))
     s8=db.Column(db.String(2))
     s9=db.Column(db.String(2))
+    gameopen=db.Column(db.Boolean, default=True)
     #add a count of the number of squares that are filled to not have to check if board is full
     #add a column that keeps track of game status so players cant do anything if game status is gameover
     playerturn=db.Column(db.Boolean, default=True)
@@ -36,6 +37,7 @@ class GameModel(db.Model):
         self.s8=""
         self.s9=""
         self.playerturn=True
+        self.gameopen=True
     
     def gameBoard(self):
         return[
@@ -163,10 +165,16 @@ class GameModel(db.Model):
         if board[2]==board[4]and board[4]==board[6]and board[2]!="":
             found=board[2]
         if found=="x":
+            self.gameopen=False
+            db.session.commit()
             return{"winner":"player1"}
         elif found=="o":
+            self.gameopen=False
+            db.session.commit()
             return {"winner":"player2"}
         elif allempty==True:
+            self.gameopen=False
+            db.session.commit()
             return {"winner":"tie"}
         else:
             return{"winner":"none"}
