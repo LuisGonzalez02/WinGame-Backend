@@ -68,10 +68,11 @@ class UserModel(db.Model):
         return jsonify({'leaders' : output})
     def userRecord(self):
         user_record = {}
+        user_record['name']=self.username
         user_record['wins'] = self.wins
         user_record['loses'] = self.loses
         user_record['ties'] = self.ties
-        return {self.username:user_record}
+        return user_record
 
 
 
