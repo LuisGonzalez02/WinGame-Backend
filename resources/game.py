@@ -13,7 +13,7 @@ class Game(Resource):
             board=ingame.gameBoard()
             return{"message": "Username already in game","game_id":ingame.id,"board":board,"active":ingame.gameopen}
         foundUser=GameModel(user.username)
-        return foundUser.create_game(user.username,"active":ingame.gameopen)
+        return foundUser.create_game(user.username)
     @jwt_required()
     def delete(self):
         info= GameModel.check_if_in_game(current_identity.username)
