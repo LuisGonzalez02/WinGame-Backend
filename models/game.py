@@ -3,6 +3,7 @@ from flask import jsonify
 import copy
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import or_
 
 class GameModel(db.Model):
     __tablename__="game"
@@ -86,7 +87,7 @@ class GameModel(db.Model):
         return {"message":"Game Started","game_id":gameInfo.id,"board":["","","","","","","","",""],"active":gameInfo.gameopen,"player1":gameInfo.player1,"player2":gameInfo.player2}
     @classmethod
     def leave_game(cls,user_id):
-        cls.query.filter(cls.player1==user_id or cls.player2==user_id).delete()
+        games=cls.query.filter(or_(cls.player1==user_id, cls.player2==user_id)).delete()
         db.session.commit()
     @classmethod
     def find_game(cls,user_id):
