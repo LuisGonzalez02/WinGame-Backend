@@ -78,7 +78,7 @@ class GameModel(db.Model):
             val= False
         else:
             val= True
-        theBoard=game.gameBoard()
+        theBoard=self.gameBoard()
         return{"status":val,"board":theBoard}
     def create_game(self,username,pvpType):
         self.pvp=pvpType
