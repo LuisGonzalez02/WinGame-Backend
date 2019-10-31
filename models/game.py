@@ -76,8 +76,10 @@ class GameModel(db.Model):
             val =False
         elif self.playerturn==False and position==1:
             val= False
-        else:
+        elif self.playerturn==False and position==2:
             val= True
+        else:
+            val=False
         theBoard=self.gameBoard()
         return{"status":val,"board":theBoard}
     def create_game(self,username,pvpType):
