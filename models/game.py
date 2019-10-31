@@ -107,7 +107,7 @@ class GameModel(db.Model):
         return cls.query.filter_by(id=user_id).first()
     def make_move(self,move, symbol,position):
         if self.check_turn(position):
-            self.playerturn=False
+            self.playerturn= not self.playerturn
             if move==1:
                 if self.s1!="":
                     return False
