@@ -106,7 +106,7 @@ class GameModel(db.Model):
     def find_by_id(cls,user_id):
         return cls.query.filter_by(id=user_id).first()
     def make_move(self,move, symbol,position):
-        if self.playerturn==True:
+        if self.check_turn():
             self.playerturn=False
             if move==1:
                 if self.s1!="":

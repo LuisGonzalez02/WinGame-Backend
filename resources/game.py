@@ -76,8 +76,9 @@ class PlayerMove(Resource):
                                 user.save_lose()
                                 return{"Game Status":"Game Lost","message":"Move has been made","board":board}
                         return {"Game Status":"Still going","message":"Not CPU Turn","board":board}
-                    board=ingame["info"].gameBoard()
-                    return {"Game Status":"Still going","board":board}
+                    else:
+                        board=ingame["info"].gameBoard()
+                        return {"Game Status":"Still going","board":board,"Game":"PVP"}
 
                     
                 else:
