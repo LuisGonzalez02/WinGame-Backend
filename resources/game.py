@@ -57,12 +57,10 @@ class PlayerMove(Resource):
         user=UserModel.find_by_username(current_identity.username)
         if ingame["position"]!=None:
             board=ingame["info"].gameBoard()
-            if ingame["info"].make_move(data['move'],data['symbol']):
+            if ingame["info"].make_move(data['move'],data['symbol'],ingame['position']):
                 status=ingame["info"].check_game_status()
                 if status["winner"]=="none":
-                    if ingame["info"].pvp:
-                        return {"hey":"hi"}
-                    else:                 
+                    if ingame["info"].pvp== False:               
                         if ingame["info"].cpu_move():
                             board=ingame["info"].gameBoard()
                             status=ingame["info"].check_game_status()

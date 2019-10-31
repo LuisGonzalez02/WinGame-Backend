@@ -78,7 +78,8 @@ class GameModel(db.Model):
             val= False
         else:
             val= True
-        return{"status":val}
+        theBoard=game.gameBoard()
+        return{"status":val,"board":theBoard}
     def create_game(self,username,pvpType):
         self.pvp=pvpType
         db.session.add(self)
@@ -104,45 +105,71 @@ class GameModel(db.Model):
     @classmethod
     def find_by_id(cls,user_id):
         return cls.query.filter_by(id=user_id).first()
-    def make_move(self,move, symbol):
+    def make_move(self,move, symbol,position):
         if self.playerturn==True:
             self.playerturn=False
             if move==1:
                 if self.s1!="":
                     return False
-                self.s1=symbol
+                if position==1:
+                    self.s1="x"
+                else:
+                    self.s1="o"
+                
             elif move==2:
                 if self.s2!="":
                     return False
-                self.s2=symbol
+                if position==1:
+                    self.s2="x"
+                else:
+                    self.s2="o"
             elif move==3:
                 if self.s3!="":
                     return False
-                self.s3=symbol
+                if position==1:
+                    self.s3="x"
+                else:
+                    self.s3="o"
             elif move==4:
                 if self.s4!="":
                     return False
-                self.s4=symbol
+                if position==1:
+                    self.s4="x"
+                else:
+                    self.s4="o"
             elif move==5:
                 if self.s5!="":
                     return False
-                self.s5=symbol
+                if position==1:
+                    self.s5="x"
+                else:
+                    self.s5="o"
             elif move==6:
                 if self.s6!="":
                     return False
-                self.s6=symbol
+                if position==1:
+                    self.s6="x"
+                else:
+                    self.s6="o"
             elif move==7:
-                if self.s7!="":
-                    return False
-                self.s7=symbol
+                if position==1:
+                    self.s7="x"
+                else:
+                    self.s7="o"
             elif move==8:
                 if self.s8!="":
                     return False
-                self.s8=symbol
+                if position==1:
+                    self.s8="x"
+                else:
+                    self.s8="o"
             elif move==9:
                 if self.s9!="":
                     return False
-                self.s9=symbol
+                if position==1:
+                    self.s9="x"
+                else:
+                    self.s9="o"
             db.session.commit()
             return True
         return False
