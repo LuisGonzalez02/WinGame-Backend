@@ -74,7 +74,7 @@ class GameModel(db.Model):
             val= True
         elif self.playerturn==True and position==2:
             val =False
-        elif self.playerTurn==False and position==1:
+        elif self.playerturn==False and position==1:
             val= False
         else:
             val= True
