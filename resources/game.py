@@ -55,6 +55,11 @@ class PlayerMove(Resource):
         data=PlayerMove.parser.parse_args()
         ingame=GameModel.check_if_in_game(current_identity.username)
         user=UserModel.find_by_username(current_identity.username)
+        user2=None
+        if ingame['position']==1:
+            user2=UserModel.find_by_username(ingame['player2'])
+        else:
+            user2=UserModel.find_by_username(ingame['player1'])
         if ingame["position"]!=None:
             board=ingame["info"].gameBoard()
             if ingame["info"].make_move(data['move'],data['symbol'],ingame['position']):
@@ -85,12 +90,15 @@ class PlayerMove(Resource):
                     board=ingame["info"].gameBoard()
                     if status["winner"]=="player1":
                         user.save_win()
+                        user2.save_lose()
                         return{"Game Status":"Game Won","message":"Move has been made","board":board}
                     elif status["winner"]=="tie":
                         user.save_tie()
+                        user2.save_tie()
                         return{"Game Status":"Tie","message":"Move has been made","board":board}
                     else:
                         user.save_lose()
+                        user2.save_win()
                         return{"Game Status":"Game Lost","message":"Move has been made","board":board}
             return {"message":"Not Player Turn/Space already used","Game Status":"Still going","board":board}
         return{"message":"User not in game","Game Status":"Still going","board":["","","","","","","","",""]}
