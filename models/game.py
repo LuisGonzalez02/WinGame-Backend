@@ -4,6 +4,7 @@ import copy
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import or_
+from models.user import UserModel
 
 class GameModel(db.Model):
     __tablename__="game"
@@ -68,7 +69,8 @@ class GameModel(db.Model):
         else:
             position=1
         return {"position":position,"info":player}
-    def check_turn(self,position):
+    def check_turn(self,position,username):
+        if self.playerturn
         val=False
         if self.playerturn==True and position==1:
             val= True
@@ -81,7 +83,8 @@ class GameModel(db.Model):
         else:
             val=False
         theBoard=self.gameBoard()
-        return{"status":val,"board":theBoard}
+        user=UserModel.find_by_username(username)
+        return{"status":val,"board":theBoard, "record":user.userRecord()}
     def create_game(self,username,pvpType):
         self.pvp=pvpType
         db.session.add(self)

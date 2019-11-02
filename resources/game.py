@@ -26,7 +26,7 @@ class PVPCheckIfMove(Resource):
         user=current_identity
         ingame=GameModel.check_if_in_game(user.username)
         if ingame["position"] !=None:
-            return ingame["info"].check_turn(ingame["position"])
+            return ingame["info"].check_turn(ingame["position"],user.username)
         return {"message":"Not in Game"}
 
 class PVPGame(Resource):
