@@ -70,7 +70,6 @@ class GameModel(db.Model):
             position=1
         return {"position":position,"info":player}
     def check_turn(self,position,username):
-        if self.playerturn
         val=False
         if self.playerturn==True and position==1:
             val= True
