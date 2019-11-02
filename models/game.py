@@ -82,8 +82,16 @@ class GameModel(db.Model):
         else:
             val=False
         theBoard=self.gameBoard()
+        player1=None
+        player2=None
+        if position==1:
+            player1=self.player1
+            player2=self.player2
+        else:
+            player1=self.player2
+            player2=self.player1
         user=UserModel.find_by_username(username)
-        return{"status":val,"board":theBoard, "record":user.userRecord()}
+        return{"status":val,"board":theBoard, "record":user.userRecord(),"player1":player1,"player2":player2}
     def create_game(self,username,pvpType):
         self.pvp=pvpType
         db.session.add(self)
