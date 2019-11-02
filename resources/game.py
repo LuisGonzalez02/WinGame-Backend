@@ -57,9 +57,9 @@ class PlayerMove(Resource):
         user=UserModel.find_by_username(current_identity.username)
         user2=None
         if ingame['position']==1:
-            user2=UserModel.find_by_username(ingame['info']['player2'])
+            user2=UserModel.find_by_username(ingame['info'].player2)
         else:
-            user2=UserModel.find_by_username(ingame['info']['player1'])
+            user2=UserModel.find_by_username(ingame['info'].player1)
         if ingame["position"]!=None:
             board=ingame["info"].gameBoard()
             if ingame["info"].make_move(data['move'],data['symbol'],ingame['position']):
