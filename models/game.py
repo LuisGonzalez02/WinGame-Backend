@@ -95,12 +95,16 @@ class GameModel(db.Model):
         status=self.check_game_status()
         if status["winner"]=="none":
             statline="Still going"
-        elif status["winner"]=="player1":
+        elif status["winner"]=="player1" and position==1:
+            statline="Game Won"
+        elif status["winner"]=="player1" and position==2:
+            statline="Game Lost"
+        elif status["winner"]=="player2" and position==1:
+            statline="Game Lost"
+        elif status["winner"]=="player2" and position==2:
             statline="Game Won"
         elif status["winner"]=="tie":
             statline="Tie"
-        else:
-            statline="Game Lost"
         return{"status":val,"board":theBoard, "record":user.userRecord(),"player1":player1,"player2":player2,"Game Status":statline}
     def create_game(self,username,pvpType):
         self.pvp=pvpType
