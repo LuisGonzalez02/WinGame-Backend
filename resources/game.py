@@ -12,7 +12,7 @@ class Game(Resource):
         if ingame["position"]!=None:
             board=ingame["info"].gameBoard()
             return{"message": "Username already in game","game_id":ingame["info"].id,"board":board,"active":ingame["info"].gameopen,"player1":user.username,"player2":"CPU"}
-        foundUser=GameModel(user.username,False,"CPU")
+        foundUser=GameModel(user.username,"solo","CPU")
         return foundUser.create_game(user.username,False)
     @jwt_required()
     def delete(self):
@@ -37,7 +37,7 @@ class PVPGame(Resource):
         if ingame["position"]!=None:
             board=ingame["info"].gameBoard()
             return{"message": "Username already in game","game_id":ingame["info"].id,"board":board,"active":ingame["info"].gameopen}
-        foundUser=GameModel(user.username,True,"")
+        foundUser=GameModel(user.username,"pvp","")
         return foundUser.find_game(user.username)
 
 class PlayerMove(Resource):
