@@ -91,7 +91,17 @@ class GameModel(db.Model):
             player1=self.player2
             player2=self.player1
         user=UserModel.find_by_username(username)
-        return{"status":val,"board":theBoard, "record":user.userRecord(),"player1":player1,"player2":player2}
+        statline=None
+        status=self.check_game_status()
+        if status["winner"]=="none":
+            statline="Still going"
+        elif status["winner"]=="player1":
+            statline="Game Won"
+        elif status["winner"]=="tie":
+            statline="Tie"
+        else:
+            statline="Game Lost"
+        return{"status":val,"board":theBoard, "record":user.userRecord(),"player1":player1,"player2":player2,"Game Status":statline}
     def create_game(self,username,pvpType):
         self.pvp=pvpType
         db.session.add(self)
