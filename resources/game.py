@@ -11,7 +11,7 @@ class Game(Resource):
         ingame=GameModel.check_if_in_game(user.username)
         if ingame["position"]!=None:
             board=ingame["info"].gameBoard()
-            return{"message": "Username already in game","game_id":ingame["info"].id,"board":board,"active":ingame["info"].gameopen}
+            return{"message": "Username already in game","game_id":ingame["info"].id,"board":board,"active":ingame["info"].gameopen,"player1":user.username,"player2":"CPU"}
         foundUser=GameModel(user.username,False,"CPU")
         return foundUser.create_game(user.username,False)
     @jwt_required()
