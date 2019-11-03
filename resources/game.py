@@ -90,15 +90,18 @@ class PlayerMove(Resource):
                     board=ingame["info"].gameBoard()
                     if status["winner"]=="player1":
                         user.save_win()
-                        user2.save_lose()
+                        if ingame["info"].pvp==True:
+                            user2.save_lose()
                         return{"Game Status":"Game Won","message":"Move has been made","board":board}
                     elif status["winner"]=="tie":
                         user.save_tie()
-                        user2.save_tie()
+                        if ingame["info"].pvp==True:
+                            user2.save_tie()
                         return{"Game Status":"Tie","message":"Move has been made","board":board}
                     else:
                         user.save_lose()
-                        user2.save_win()
+                        if ingame["info"].pvp==True:
+                            user2.save_win()
                         return{"Game Status":"Game Lost","message":"Move has been made","board":board}
             return {"message":"Not Player Turn/Space already used","Game Status":"Still going","board":board}
         return{"message":"User not in game","Game Status":"Still going","board":["","","","","","","","",""]}
