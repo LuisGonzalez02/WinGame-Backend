@@ -88,8 +88,8 @@ class GameModel(db.Model):
             p1=self.player1
             p2=self.player2
         else:
-            player1=self.player2
-            player2=self.player1
+            p1=self.player2
+            p2=self.player1
         user=UserModel.find_by_username(username)
         statline=None
         status=self.check_game_status()
