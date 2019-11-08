@@ -109,9 +109,9 @@ class GameModel(db.Model):
             if self.boardTiles[move-1]!="":
                 return False
             if position==1:
-                self.boardTiles[move-1]=="x"
+                self.boardTiles[move-1]="x"
             else:
-                self.boardTiles[move-1]=="0"
+                self.boardTiles[move-1]="o"
             db.session.commit()
             return True
         return False
@@ -120,7 +120,7 @@ class GameModel(db.Model):
             self.playerturn=True
             for tile in self.boardTiles:
                 if tile=="":
-                    tile="0"
+                    tile="o"
                     break
             db.session.commit()
             return True
