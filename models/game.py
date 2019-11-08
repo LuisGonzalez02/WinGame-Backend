@@ -4,8 +4,8 @@ import copy
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import or_
+from sqlalchemy.orm.attributes import flag_modified
 from models.user import UserModel
-from models.MutableList import MutableList
 
 class GameModel(db.Model):
     __tablename__="game"
@@ -14,7 +14,7 @@ class GameModel(db.Model):
     player1=db.Column(db.String(50))
     pvp=db.Column(db.Boolean, default=True)
     player2=db.Column(db.String(50))
-    boardTiles=db.Column(MutableList.as_mutable(db.ARRAY(db.String(2))))
+    boardTiles=db.Column(db.ARRAY(db.String(2)))
     gameopen=db.Column(db.Boolean, default=True)
     #add a count of the number of squares that are filled to not have to check if board is full
     #add a column that keeps track of game status so players cant do anything if game status is gameover
@@ -107,12 +107,14 @@ class GameModel(db.Model):
         turn=self.check_turn(position,username)
         if turn["status"]:    
             self.playerturn= not self.playerturn
-            if self.boardTiles[move-1]=="":
+            if self.boardTiles[move-1]!="":
                 return False
             if position==1:
-                self.boardTiles=["x","","","","","","","",""]
+                self.boardTiles[move-1]="x"
+                flag_modified(self, 'boardtiles')
             else:
-                self.boardTiles=["","o","","","","","","",""]
+                self.boardTiles[move-1]="o"
+                flag_modified(self, 'boardtiles')
             db.session.commit()
             return True
         return False
