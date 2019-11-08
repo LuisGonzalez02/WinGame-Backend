@@ -110,9 +110,9 @@ class GameModel(db.Model):
             if self.boardTiles[move-1]!="":
                 return False
             if position==1:
-                self.boardTiles[move-1]="x"
+                self.boardTiles=["x","","","","","","","",""]
             else:
-                self.boardTiles[move-1]="o"
+                self.boardTiles=["","o","","","","","","",""]
             db.session.commit()
             return True
         return False
