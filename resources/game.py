@@ -10,7 +10,7 @@ class Game(Resource):
         user=current_identity
         ingame=GameModel.check_if_in_game(user.username)
         if ingame["position"]!=None:
-            board=ingame["info"].gameBoard()
+            board=ingame["info"].boardTiles
             return{"message": "Username already in game","game_id":ingame["info"].id,"board":board,"active":ingame["info"].gameopen,"player1":user.username,"player2":"CPU"}
         foundUser=GameModel(user.username,"solo","CPU")
         return foundUser.create_game(user.username,False)
@@ -35,7 +35,7 @@ class PVPGame(Resource):
         user=current_identity
         ingame=GameModel.check_if_in_game(user.username)
         if ingame["position"]!=None:
-            board=ingame["info"].gameBoard()
+            board=ingame["info"].boardTiles
             return{"message": "Username already in game","game_id":ingame["info"].id,"board":board,"active":ingame["info"].gameopen}
         foundUser=GameModel(user.username,"pvp","")
         return foundUser.find_game(user.username)
@@ -61,13 +61,13 @@ class PlayerMove(Resource):
         else:
             user2=UserModel.find_by_username(ingame['info'].player1)
         if ingame["position"]!=None:
-            board=ingame["info"].gameBoard()
+            board=ingame["info"].boardTiles
             if ingame["info"].make_move(data['move'],data['symbol'],ingame['position'],user.username):
                 status=ingame["info"].check_game_status()
                 if status["winner"]=="none":
                     if ingame["info"].pvp== False:               
                         if ingame["info"].cpu_move():
-                            board=ingame["info"].gameBoard()
+                            board=ingame["info"].boardTiles
                             status=ingame["info"].check_game_status()
                             if status["winner"]=="none":
                                 return{"Game Status":"Still going","message":"Move has been made","board":board}
@@ -82,12 +82,12 @@ class PlayerMove(Resource):
                                 return{"Game Status":"Game Lost","message":"Move has been made","board":board}
                         return {"Game Status":"Still going","message":"Not CPU Turn","board":board}
                     else:
-                        board=ingame["info"].gameBoard()
+                        board=ingame["info"].boardTiles
                         return {"Game Status":"Still going","board":board,"Game":"PVP"}
 
                     
                 else:
-                    board=ingame["info"].gameBoard()
+                    board=ingame["info"].boardTiles
                     if status["winner"]=="player1":
                         user.save_win()
                         if ingame["info"].pvp==True:
