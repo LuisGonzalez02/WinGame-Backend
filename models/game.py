@@ -107,7 +107,7 @@ class GameModel(db.Model):
         turn=self.check_turn(position,username)
         if turn["status"]:    
             self.playerturn= not self.playerturn
-            if self.boardTiles[move-1]!="":
+            if self.boardTiles[move-1]=="":
                 return False
             if position==1:
                 self.boardTiles=["x","","","","","","","",""]
