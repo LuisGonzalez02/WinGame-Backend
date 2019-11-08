@@ -5,6 +5,7 @@ import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import or_
 from models.user import UserModel
+from models.MutableList import MutableList
 
 class GameModel(db.Model):
     __tablename__="game"
@@ -13,7 +14,7 @@ class GameModel(db.Model):
     player1=db.Column(db.String(50))
     pvp=db.Column(db.Boolean, default=True)
     player2=db.Column(db.String(50))
-    boardTiles=db.Column(db.ARRAY(db.String(2)))
+    boardTiles=db.Column(MutableList.as_mutable(db.ARRAY(db.String(2))))
     gameopen=db.Column(db.Boolean, default=True)
     #add a count of the number of squares that are filled to not have to check if board is full
     #add a column that keeps track of game status so players cant do anything if game status is gameover
