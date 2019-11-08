@@ -111,10 +111,10 @@ class GameModel(db.Model):
                 return False
             if position==1:
                 self.boardTiles[move-1]="x"
-                flag_modified(self, 'boardtiles')
+                flag_modified(self, 'boardTiles')
             else:
                 self.boardTiles[move-1]="o"
-                flag_modified(self, 'boardtiles')
+                flag_modified(self, 'boardTiles')
             db.session.commit()
             return True
         return False
