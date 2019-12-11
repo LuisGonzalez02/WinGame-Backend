@@ -53,7 +53,6 @@ class UserTie(Resource):
         foundUser=UserModel.find_by_email(user.email)
         if foundUser:
             foundUser.save_tie()
-
         return{'message': 'Tie Saved'}
 class LeaderBoard(Resource):
     @jwt_required()

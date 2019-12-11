@@ -30,8 +30,6 @@ class GameModel(db.Model):
             self.pvp=True
         else:
             self.pvp=False
-    
-    
     @classmethod
     def check_if_in_game(cls,username):
         position=None
@@ -124,6 +122,7 @@ class GameModel(db.Model):
             for tile in self.boardTiles:
                 if tile=="":
                     tile="o"
+                    flag_modified(self, 'boardTiles')
                     break
             db.session.commit()
             return True
