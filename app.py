@@ -8,7 +8,7 @@ from resources.user import UserSignup,UserWin,UserLose,UserTie,LeaderBoard,Test,
 from resources.game import Game,PlayerMove,CPUMove,CheckStatus,PVPGame,PVPCheckIfMove
 
 app=Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE_URL','postgresql:///db_name')
+app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE_URL','postgresql:///data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 api=Api(app)
