@@ -121,7 +121,7 @@ class GameModel(db.Model):
             self.playerturn=True
             for num, tile in enumerate(self.boardTiles):
                 if tile=="":
-                    self.playerturn[num]="o"
+                    self.boardTiles[num]="o"
                     flag_modified(self, 'boardTiles')
                     break
             db.session.commit()
