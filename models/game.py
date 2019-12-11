@@ -123,7 +123,7 @@ class GameModel(db.Model):
                 if tile=="":
                     tile="o"
                     flag_modified(self, 'boardTiles')
-                    break
+                    db.session.commit()
             db.session.commit()
             return True
         return False
