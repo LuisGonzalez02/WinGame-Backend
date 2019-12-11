@@ -118,8 +118,12 @@ class GameModel(db.Model):
         return False
     def cpu_move(self):
         if self.playerturn==False:
-            self.boardTiles[0]="o"
-            flag_modified(self, 'boardTiles')
+            self.playerturn=True
+            for num, tile in enumerate(self.boardTiles):
+                if tile=="":
+                    self.playerturn[num]="o"
+                    flag_modified(self, 'boardTiles')
+                    break
             db.session.commit()
             return True
         return False
