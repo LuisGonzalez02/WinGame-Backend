@@ -124,7 +124,7 @@ class GameModel(db.Model):
                     tile="o"
                     flag_modified(self, 'boardTiles')
                     db.session.commit()
-            db.session.commit()
+                    return True
             return True
         return False
     def check_game_status(self):
