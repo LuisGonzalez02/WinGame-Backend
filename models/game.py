@@ -16,69 +16,36 @@ class GameModel(db.Model):
     player2=db.Column(db.String(50))
     boardTiles=db.Column(db.ARRAY(db.String(2)))
     gameopen=db.Column(db.Boolean, default=True)
-    #add a count of the number of squares that are filled to not have to check if board is full
-    #add a column that keeps track of game status so players cant do anything if game status is gameover
-    playerturn=db.Column(db.Boolean, default=True)
+    gameStatus=db.Column(db.String(70))
 
-    def __init__(self,username,gametype,cpu):
+    def __init__(self,username,gametype,secondPlayer):
         self.player1=username
-        self.player2=cpu
+        self.player2=secondPlayer
         self.boardTiles=["","","","","","","","",""]
-        self.playerturn=True
         self.gameopen=True
         if gametype=="pvp":
             self.pvp=True
+            self.gameStatus=username
         else:
             self.pvp=False
+            self.gameStatus="Looking for player"
     @classmethod
     def check_if_in_game(cls,username):
-        position=None
-        player=cls.query.filter_by(player1=username).first()
-        if player==None:
-            player=cls.query.filter_by(player2=username).first()
-            if player:
-                position=2
+        player2=None
+        game=cls.query.filter_by(player1=username).first()
+        if game==None:
+            game=cls.query.filter_by(player2=username).first()
+            if game:
+                player2=game.player1
         else:
-            position=1
-        return {"position":position,"info":player}
-    def check_turn(self,position,username):
-        val=False
-        if self.playerturn==True and position==1:
-            val= True
-        elif self.playerturn==True and position==2:
-            val =False
-        elif self.playerturn==False and position==1:
-            val= False
-        elif self.playerturn==False and position==2:
-            val= True
-        else:
-            val=False
-        p1=None
-        p2=None
-        if position==1:
-            p1=self.player1
-            p2=self.player2
-        else:
-            p1=self.player2
-            p2=self.player1
-        user=UserModel.find_by_username(username)
-        statline=None
-        status=self.check_game_status()
-        if status["winner"]=="none":
-            statline="Still going"
-        elif status["winner"]=="player1" and position==1:
-            statline="Game Won"
-        elif status["winner"]=="player1" and position==2:
-            statline="Game Lost"
-        elif status["winner"]=="player2" and position==1:
-            statline="Game Lost"
-        elif status["winner"]=="player2" and position==2:
-            statline="Game Won"
-        elif status["winner"]=="tie":
-            statline="Tie"
-        return{"status":val,"board":self.boardTiles, "record":user.userRecord(),"player1":p1,"player2":p2,"Game Status":statline}
+            player2=game.player2
+        return {"player2":player2,"game":game}
     def create_game(self,username,pvpType):
         self.pvp=pvpType
+        if self.pvp==True:
+            self.gameStatus="Waiting for opponent"
+        else:
+            self.gameStatus=username
         db.session.add(self)
         db.session.commit()
         gameInfo=GameModel.query.filter_by(player1=username).first()
@@ -101,27 +68,27 @@ class GameModel(db.Model):
     @classmethod
     def find_by_id(cls,user_id):
         return cls.query.filter_by(id=user_id).first()
-    def make_move(self,move, symbol,position,username):
-        turn=self.check_turn(position,username)
-        if turn["status"]:    
-            self.playerturn= not self.playerturn
+    def make_move(self,move,symbol,username):
+        if username==self.gameStatus:    
             if self.boardTiles[move-1]!="":
                 return False
-            if position==1:
+            if username==self.player1:
                 self.boardTiles[move-1]="x"
+                self.gameStatus=self.player2
                 flag_modified(self, 'boardTiles')
             else:
                 self.boardTiles[move-1]="o"
+                self.gameStatus=self.player1
                 flag_modified(self, 'boardTiles')
             db.session.commit()
             return True
         return False
     def cpu_move(self):
-        if self.playerturn==False:
-            self.playerturn=True
+        if self.gameStatus=="CPU":
             for num, tile in enumerate(self.boardTiles):
                 if tile=="":
                     self.boardTiles[num]="o"
+                    self.gameStatus=self.player1
                     flag_modified(self, 'boardTiles')
                     break
             db.session.commit()
@@ -152,17 +119,16 @@ class GameModel(db.Model):
             found=board[2]
         if found=="x":
             self.gameopen=False
+            self.gameStatus=self.player1
             db.session.commit()
-            return{"winner":"player1"}
         elif found=="o":
             self.gameopen=False
+            self.gameStatus=self.player2
             db.session.commit()
-            return {"winner":"player2"}
         elif allempty==True:
             self.gameopen=False
+            self.gameStatus="Tie"
             db.session.commit()
-            return {"winner":"tie"}
-        else:
-            return{"winner":"none"}
+        return{"status":self.gameStatus,"open":self.gameopen}
 
         

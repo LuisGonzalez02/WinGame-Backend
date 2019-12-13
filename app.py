@@ -4,19 +4,19 @@ import os
 from flask_jwt import JWT
 
 from security import authenticate, identity
-from resources.user import UserSignup,UserWin,UserLose,UserTie,LeaderBoard,Test,UserRecord
-from resources.game import Game,PlayerMove,CPUMove,CheckStatus,PVPGame,PVPCheckIfMove
+from resources.user import UserSignup,UserWin,UserLose,UserTie,LeaderBoard,UserRecord
+from resources.game import Game,PlayerMove,CPUMove,PVPGame,PVPCheckIfMove
 
 app=Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE_URL','postgresql:///data.db')
+app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE_URL','postgresql://postgres:postgres@localhost:5432/game')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 api=Api(app)
 
 
-# @app.before_first_request
-# def create_tables():
-#     db.create_all()
+@app.before_first_request
+def create_tables():
+    db.create_all()
 
 jwt=JWT(app, authenticate, identity)
 
@@ -29,11 +29,8 @@ api.add_resource(LeaderBoard, '/leaderboard')
 api.add_resource(Game, '/gamehandle')
 api.add_resource(PlayerMove, '/playermove')
 api.add_resource(CPUMove, '/cpumove')
-api.add_resource(CheckStatus, '/checkstatus')
 api.add_resource(PVPGame, '/pvpstart')
 api.add_resource(PVPCheckIfMove, '/pvpstatus')
-api.add_resource(Test, '/test')
-
 
 if __name__ == '__main__':
     from db import db

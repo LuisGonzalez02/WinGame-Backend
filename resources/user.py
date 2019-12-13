@@ -65,7 +65,4 @@ class UserRecord(Resource):
         foundUser=UserModel.find_by_email(user.email)
         if foundUser:
             return foundUser.userRecord()
-class Test(Resource):
-    def get(self):
-        return {"hey":"hello"}
         
