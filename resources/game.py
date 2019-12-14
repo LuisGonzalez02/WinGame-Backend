@@ -8,7 +8,7 @@ class Game(Resource):
     @jwt_required()
     def get(self):
         ingame=GameModel.check_if_in_game(current_identity.username)
-        if ingame["game"]==None:
+        if ingame==None:
             ingame=GameModel(current_identity.username,"solo","CPU")
         return{"board":ingame.boardTiles,"active":ingame.gameopen,"player1":ingame.player1,"player2":ingame.player2,"status":ingame.gameStatus}
     @jwt_required()
@@ -23,14 +23,14 @@ class PVPCheckIfMove(Resource):
     def get(self):
         ingame=GameModel.check_if_in_game(current_identity.username)
         user=UserModel.find_by_username(current_identity.username)
-        if ingame["game"] !=None:
+        if ingame !=None:
             return {"message": "User in Game","status":ingame.gameopen, "board":ingame.boardTiles,"record":user.userRecord(),"player1":ingame.player1,"player2":ingame.player2}
         return {"message":"Not in Game"}
 class PVPGame(Resource):
     @jwt_required()
     def get(self):
         ingame=GameModel.check_if_in_game(current_identity.username)
-        if ingame["game"]==None:
+        if ingame==None:
             ingame=GameModel(current_identity.username,"pvp","")
         return{"board":ingame.boardTiles,"active":ingame.gameopen,"player1":ingame.player1,"player2":ingame.player2,"status":ingame.gameStatus}
 
@@ -68,15 +68,15 @@ class PlayerMove(Resource):
             else:
                 if game["status"]==current_identity.username:
                     user.save_win()
-                    if ingame["game"].pvp==True:
+                    if ingame.pvp==True:
                         user2.save_lose()
                 elif game["status"]=="Tie":
                     user.save_tie()
-                    if ingame["game"].pvp==True:
+                    if ingame.pvp==True:
                         user2.save_tie()
                 else:
                     user.save_lose()
-                    if ingame["game"].pvp==True:
+                    if ingame.pvp==True:
                         user2.save_win()
         ingame=GameModel.check_if_in_game(current_identity.username)
         return{"board":ingame.boardTiles,"status":ingame.gameStatus,"inProgress":ingame.gameopen,"player1":ingame.player1,"player2":ingame.player2}
