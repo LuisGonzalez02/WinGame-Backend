@@ -24,7 +24,7 @@ class PVPCheckIfMove(Resource):
         ingame=GameModel.check_if_in_game(current_identity.username)
         user=UserModel.find_by_username(current_identity.username)
         if ingame !=None:
-            return {"message": "User in Game","status":ingame.gameopen, "board":ingame.boardTiles,"record":user.userRecord(),"player1":ingame.player1,"player2":ingame.player2}
+            return {"message": "User in Game","status":ingame.gamestatus,"active":ingame.gameopen, "board":ingame.boardTiles,"record":user.userRecord(),"player1":ingame.player1,"player2":ingame.player2}
         return {"message":"Not in Game"}
 class PVPGame(Resource):
     @jwt_required()
