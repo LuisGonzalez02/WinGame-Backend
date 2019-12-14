@@ -64,7 +64,7 @@ class GameModel(db.Model):
             return{"message":"Game Start", "status":game.gameStatus,"active":game.gameopen,"board":game.boardTiles,"player1":game.player1,"player2":game.player2}
         else:
             game.player2=user_id
-            game.gameStatus=player1
+            game.gameStatus=game.player1
             db.session.commit()
             return{"message":"Join game", "status":game.gameStatus,"active":game.gameopen,"board":game.boardTiles,"player1":game.player1,"player2":game.player2}
     def cpu_move(self):
