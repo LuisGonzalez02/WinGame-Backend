@@ -32,8 +32,7 @@ class PVPGame(Resource):
         ingame=GameModel.check_if_in_game(current_identity.username)
         if ingame!=None:
             return{"board":ingame.boardTiles,"active":ingame.gameopen,"player1":ingame.player1,"player2":ingame.player2,"status":ingame.gameStatus}
-        foundUser=GameModel(current_identity.username,"pvp","")
-        return foundUser.find_game(current_identity.username)
+        return GameModel.find_game(current_identity.username)
 class PlayerMove(Resource):
     parser=reqparse.RequestParser()
     parser.add_argument('move',

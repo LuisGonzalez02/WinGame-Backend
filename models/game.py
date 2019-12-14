@@ -25,10 +25,10 @@ class GameModel(db.Model):
         self.gameopen=True
         if gametype=="pvp":
             self.pvp=True
-            self.gameStatus=username
+            self.gameStatus="Waiting for opponent"
         else:
             self.pvp=False
-            self.gameStatus="Waiting for opponent"
+            self.gameStatus=username
     @classmethod
     def check_if_in_game(cls,username):
         return cls.query.filter(or_(cls.player1==username, cls.player2==username)).first()
@@ -58,14 +58,15 @@ class GameModel(db.Model):
     def find_game(cls,user_id):
         game= cls.query.filter(cls.player1 != user_id).filter(cls.player2=="").filter_by(pvp=True).first()
         if game==None:
-            game=GameModel(user_id,True,"")
+            game=GameModel(user_id,"pvp","")
             db.session.add(game)
             db.session.commit()
             return{"message":"Game Start", "status":game.gameStatus,"active":game.gameopen,"board":game.boardTiles,"player1":game.player1,"player2":game.player2}
         else:
             game.player2=user_id
+            game.gameStatus=player1
             db.session.commit()
-            return{"message":"Game Continued", "status":game.gameStatus,"active":game.gameopen,"board":game.boardTiles,"player1":game.player1,"player2":game.player2}
+            return{"message":"Join game", "status":game.gameStatus,"active":game.gameopen,"board":game.boardTiles,"player1":game.player1,"player2":game.player2}
     def cpu_move(self):
         if self.gameStatus=="CPU":
             for num, tile in enumerate(self.boardTiles):
