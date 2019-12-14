@@ -54,6 +54,18 @@ class GameModel(db.Model):
             db.session.commit()
             return True
         return False
+    @classmethod
+    def find_game(cls,user_id):
+        game= cls.query.filter(cls.player1 != user_id).filter(cls.player2=="").filter_by(pvp=True).first()
+        if game==None:
+            game=GameModel(user_id,True,"")
+            db.session.add(game)
+            db.session.commit()
+            return{"message":"Game Start", "status":game.gameStatus,"active":game.gameopen,"board":game.boardTiles,"player1":game.player1,"player2":game.player2}
+        else:
+            game.player2=user_id
+            db.session.commit()
+            return{"message":"Game Continued", "status":game.gameStatus,"active":game.gameopen,"board":game.boardTiles,"player1":game.player1,"player2":game.player2}
     def cpu_move(self):
         if self.gameStatus=="CPU":
             for num, tile in enumerate(self.boardTiles):

@@ -30,10 +30,10 @@ class PVPGame(Resource):
     @jwt_required()
     def get(self):
         ingame=GameModel.check_if_in_game(current_identity.username)
-        if ingame==None:
-            ingame=GameModel(current_identity.username,"pvp","")
-        return{"board":ingame.boardTiles,"active":ingame.gameopen,"player1":ingame.player1,"player2":ingame.player2,"status":ingame.gameStatus}
-
+        if ingame!=None:
+            return{"board":ingame.boardTiles,"active":ingame.gameopen,"player1":ingame.player1,"player2":ingame.player2,"status":ingame.gameStatus}
+        foundUser=GameModel(current_identity.username,"pvp","")
+        return foundUser.find_game(current_identity.username)
 class PlayerMove(Resource):
     parser=reqparse.RequestParser()
     parser.add_argument('move',
