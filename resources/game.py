@@ -78,7 +78,7 @@ class PlayerMove(Resource):
                     if ingame.pvp==True:
                         user2.save_win()
         ingame=GameModel.check_if_in_game(current_identity.username)
-        return{"board":ingame.boardTiles,"status":ingame.gameStatus,"inProgress":ingame.gameopen,"player1":ingame.player1,"player2":ingame.player2}
+        return{"board":ingame.boardTiles,"status":ingame.gameStatus,"active":ingame.gameopen,"player1":ingame.player1,"player2":ingame.player2}
 
 
 
