@@ -28,43 +28,14 @@ class GameModel(db.Model):
             self.gameStatus=username
         else:
             self.pvp=False
-            self.gameStatus="Looking for player"
+            self.gameStatus="Waiting for opponent"
     @classmethod
     def check_if_in_game(cls,username):
-        player2=None
-        game=cls.query.filter_by(player1=username).first()
-        if game==None:
-            game=cls.query.filter_by(player2=username).first()
-            if game:
-                player2=game.player1
-        else:
-            player2=game.player2
-        return {"player2":player2,"game":game}
-    def create_game(self,username,pvpType):
-        self.pvp=pvpType
-        if self.pvp==True:
-            self.gameStatus="Waiting for opponent"
-        else:
-            self.gameStatus=username
-        db.session.add(self)
-        db.session.commit()
-        gameInfo=GameModel.query.filter_by(player1=username).first()
-        return {"message":"Game Started","game_id":gameInfo.id,"board":["","","","","","","","",""],"active":gameInfo.gameopen,"player1":gameInfo.player1,"player2":gameInfo.player2}
+        return cls.query.filter(or_(cls.player1==username, cls.player2==username)).first()
     @classmethod
     def leave_game(cls,user_id):
         games=cls.query.filter(or_(cls.player1==user_id, cls.player2==user_id)).delete()
         db.session.commit()
-    @classmethod
-    def find_game(cls,user_id):
-        game= cls.query.filter(cls.player1 != user_id).filter(cls.player2=="").filter_by(pvp=True).first()
-        if game==None:
-            user=GameModel(user_id,True,"")
-            return user.create_game(user_id,True)
-        else:
-            game.player2=user_id
-            db.session.commit()
-            return{"message":"Game Started", "game_id": game.id,"board":game.boardTiles,"player1":game.player1,"player2":game.player2}
-
     @classmethod
     def find_by_id(cls,user_id):
         return cls.query.filter_by(id=user_id).first()

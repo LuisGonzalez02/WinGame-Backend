@@ -5,7 +5,7 @@ from flask_jwt import JWT
 
 from security import authenticate, identity
 from resources.user import UserSignup,UserWin,UserLose,UserTie,LeaderBoard,UserRecord
-from resources.game import Game,PlayerMove,CPUMove,PVPGame,PVPCheckIfMove
+from resources.game import Game,PlayerMove,PVPGame,PVPCheckIfMove
 
 app=Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE_URL','postgresql://postgres:postgres@localhost:5432/game')
@@ -28,7 +28,6 @@ api.add_resource(UserRecord, '/user/record')
 api.add_resource(LeaderBoard, '/leaderboard')
 api.add_resource(Game, '/gamehandle')
 api.add_resource(PlayerMove, '/playermove')
-api.add_resource(CPUMove, '/cpumove')
 api.add_resource(PVPGame, '/pvpstart')
 api.add_resource(PVPCheckIfMove, '/pvpstatus')
 
