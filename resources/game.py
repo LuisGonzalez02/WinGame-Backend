@@ -10,6 +10,7 @@ class Game(Resource):
         ingame=GameModel.check_if_in_game(current_identity.username)
         if ingame==None:
             ingame=GameModel(current_identity.username,"solo","CPU")
+            return ingame.create_game(current_identity.username,True)
         return{"board":ingame.boardTiles,"active":ingame.gameopen,"player1":ingame.player1,"player2":ingame.player2,"status":ingame.gameStatus}
     @jwt_required()
     def delete(self):

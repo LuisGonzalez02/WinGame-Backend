@@ -36,9 +36,16 @@ class GameModel(db.Model):
     def leave_game(cls,user_id):
         games=cls.query.filter(or_(cls.player1==user_id, cls.player2==user_id)).delete()
         db.session.commit()
-    @classmethod
-    def find_by_id(cls,user_id):
-        return cls.query.filter_by(id=user_id).first()
+    def create_game(self,username,pvpType):
+        self.pvp=pvpType
+        if self.pvp==True:
+            self.gameStatus="Waiting for opponent"
+        else:
+            self.gameStatus=username
+        db.session.add(self)
+        db.session.commit()
+        gameInfo=GameModel.query.filter_by(player1=username).first()
+        return {"message":"Game Started","board":gameInfo.boardTiles,"status":gameInfo.gameStatus,"active":gameInfo.gameopen,"player1":gameInfo.player1,"player2":gameInfo.player2}
     def make_move(self,move,symbol,username):
         if username==self.gameStatus:    
             if self.boardTiles[move-1]!="":
