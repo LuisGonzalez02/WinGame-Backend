@@ -6,8 +6,10 @@ from flask_jwt import JWT
 from security import authenticate, identity
 from resources.user import UserSignup,UserWin,UserLose,UserTie,LeaderBoard,UserRecord
 from resources.game import Game,PlayerMove,PVPGame,PVPCheckIfMove
+from flask_cors import CORS
 
 app=Flask(__name__)
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE_URL','postgresql://postgres:postgres@localhost:5432/game')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')

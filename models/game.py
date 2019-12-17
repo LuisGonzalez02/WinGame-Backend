@@ -46,7 +46,7 @@ class GameModel(db.Model):
         db.session.commit()
         gameInfo=GameModel.query.filter_by(player1=username).first()
         return {"message":"Game Started","board":gameInfo.boardTiles,"status":gameInfo.gameStatus,"active":gameInfo.gameopen,"player1":gameInfo.player1,"player2":gameInfo.player2}
-    def make_move(self,move,symbol,username):
+    def make_move(self,move,username):
         if username==self.gameStatus:    
             if self.boardTiles[move-1]!="":
                 return False

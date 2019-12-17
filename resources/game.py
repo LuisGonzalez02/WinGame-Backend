@@ -40,19 +40,13 @@ class PlayerMove(Resource):
                          type=int,
                          required=True,
                          help="Must select a move")
-    parser.add_argument('symbol',
-                         type=str,
-                         required=True,
-                         help="Must use symbol")
-
-    #change it so that playermove for pvp and pve games are separate
     @jwt_required()
     def put(self):
         data=PlayerMove.parser.parse_args()
         ingame=GameModel.check_if_in_game(current_identity.username)
         user=UserModel.find_by_username(ingame.player1)
         user2=UserModel.find_by_username(ingame.player2)
-        if ingame.make_move(data['move'],data['symbol'],current_identity.username):
+        if ingame.make_move(data['move'],current_identity.username):
             game = ingame.check_game_status()
             if game["open"]==True:
                 if ingame.pvp== False:               
